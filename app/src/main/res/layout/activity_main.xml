@@ -11,12 +11,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Header"
         android:layout_width="0dp"
-        android:layout_height="96dp"
+        android:layout_height="140dp"
         android:background="@drawable/header"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         app:layout_constraintBottom_toTopOf="@+id/Body"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -24,6 +25,8 @@
             android:id="@+id/imgPerfil"
             android:layout_width="44dp"
             android:layout_height="44dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,27 +34,25 @@
 
         <TextView
             android:id="@+id/textOlá"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:text="Olá,"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/imgPerfil"
             app:layout_constraintTop_toTopOf="@id/imgPerfil" />
 
         <TextView
             android:id="@+id/textNome"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Seu Nome"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/textOlá"
             app:layout_constraintTop_toBottomOf="@id/textOlá" />
 
@@ -68,6 +69,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Header">
 
+
         <ScrollView
             android:id="@+id/scrol"
             android:layout_width="0dp"
@@ -77,52 +79,272 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" >
+            app:layout_constraintVertical_bias="0.0">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ContraintStatus"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/StatusCard"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="#EEF2F7"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/textStatusDoSistema"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Status do Sistema"
+                            android:textColor="@color/cinza_legenda"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textStatusOnlineOffline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="Online"
+                            android:textColor="#111827"
+                            android:textSize="18sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textStatusDoSistema" />
+
+                        <TextView
+                            android:id="@+id/textAtualizacaoStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Atualizado 2 min atrás"
+                            android:textColor="@color/cinza_legenda"
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textStatusOnlineOffline" />
+
+                        <ImageView
+                            android:id="@+id/imgCheckStatus"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginTop="-5dp"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="@null"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="#22C55E" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/EstatisticaCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="false"
+                    app:strokeColor="#B3C4CB"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#9ED6EEFF">
+
+                        <TextView
+                            android:id="@+id/textEstattisticas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="18dp"
+                            android:text="Estatistícas"
+                            android:textColor="@color/black"
+                            android:textColorLink="#00FFFFFF"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/imgEventosHoje"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginStart="60dp"
+                            android:layout_marginTop="15dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textEstattisticas"
+                            app:srcCompat="@drawable/ic_launcher_background" />
+
+                        <TextView
+                            android:id="@+id/textR_EventosHoje"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:text="TextView"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="@+id/imgEventosHoje"
+                            app:layout_constraintStart_toStartOf="@+id/imgEventosHoje"
+                            app:layout_constraintTop_toBottomOf="@+id/imgEventosHoje" />
+
+                        <TextView
+                            android:id="@+id/textEventoshoje"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="18dp"
+                            android:text="Eventos Hoje"
+                            android:textColor="#8A8A8A"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/textR_EventosHoje"
+                            app:layout_constraintStart_toStartOf="@+id/textR_EventosHoje"
+                            app:layout_constraintTop_toBottomOf="@+id/textR_EventosHoje" />
+
+                        <ImageView
+                            android:id="@+id/imgAlertasAtivos"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/imgEventosHoje"
+                            app:layout_constraintEnd_toStartOf="@+id/imgTempoOnline"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/imgEventosHoje"
+                            app:layout_constraintTop_toTopOf="@+id/imgEventosHoje"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:srcCompat="@drawable/ic_launcher_background" />
+
+                        <ImageView
+                            android:id="@+id/imgTempoOnline"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_marginEnd="60dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/imgAlertasAtivos"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/imgAlertasAtivos"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:srcCompat="@drawable/ic_launcher_background" />
+
+                        <TextView
+                            android:id="@+id/textR_AlertasAtivos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:text="TextView"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="@+id/imgAlertasAtivos"
+                            app:layout_constraintStart_toStartOf="@+id/imgAlertasAtivos"
+                            app:layout_constraintTop_toBottomOf="@+id/imgAlertasAtivos" />
+
+                        <TextView
+                            android:id="@+id/textAlertasAtivos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="18dp"
+                            android:text="Alertas Ativos"
+                            android:textColor="@color/cinza_legenda"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/textR_AlertasAtivos"
+                            app:layout_constraintStart_toStartOf="@+id/textR_AlertasAtivos"
+                            app:layout_constraintTop_toBottomOf="@+id/textR_AlertasAtivos" />
+
+                        <TextView
+                            android:id="@+id/textR_TempoOnline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:text="TextView"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="@+id/imgTempoOnline"
+                            app:layout_constraintStart_toStartOf="@+id/imgTempoOnline"
+                            app:layout_constraintTop_toBottomOf="@+id/imgTempoOnline" />
+
+                        <TextView
+                            android:id="@+id/textTempoOnline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="18dp"
+                            android:text="Tempo Online"
+                            android:textColor="@color/cinza_legenda"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/textR_TempoOnline"
+                            app:layout_constraintStart_toStartOf="@+id/textR_TempoOnline"
+                            app:layout_constraintTop_toBottomOf="@+id/textR_TempoOnline" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/GraficoCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="#EEF2F7"
+                    app:strokeWidth="1dp">
 
                     <TextView
-                        android:id="@+id/textStatusDoSistema"
+                        android:id="@+id/textGraficoExemplo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="38dp"
-                        android:layout_marginTop="24dp"
-                        android:text="Status fo Sistema"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:text="Gafico"
+                        android:textSize="34sp" />
+                </com.google.android.material.card.MaterialCardView>
 
-                    <TextView
-                        android:id="@+id/textStatusOnlineOffline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Online"
-                        android:textColor="@color/black"
-                        android:textSize="24sp"
-                        app:layout_constraintStart_toStartOf="@+id/textStatusDoSistema"
-                        app:layout_constraintTop_toBottomOf="@+id/textStatusDoSistema" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/HistoricoCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="16dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="#EEF2F7"
+                    app:strokeWidth="1dp">
 
-                    <TextView
-                        android:id="@+id/textAtualizacaoStatus"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Atualizado 2 min atrás"
-                        app:layout_constraintStart_toStartOf="@+id/textStatusOnlineOffline"
-                        app:layout_constraintTop_toBottomOf="@+id/textStatusOnlineOffline" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:padding="16dp">
+
+                        <TextView
+                            android:id="@+id/txtHistoricoTitulo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Histórico Recente"
+                            android:textColor="#111827"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvHistorico"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:nestedScrollingEnabled="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/txtHistoricoTitulo" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
             </LinearLayout>
         </ScrollView>
-
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
@@ -136,7 +358,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/imgInicio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="botão menu início"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageButton
+                    android:id="@+id/imgLigacao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="botão menu ligacao"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageButton
+                    android:id="@+id/imgConfiguracao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:contentDescription="botão menu configuração"
+                    tools:srcCompat="@tools:sample/avatars" />
+            </LinearLayout>
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
     </androidx.constraintlayout.widget.ConstraintLayout>
