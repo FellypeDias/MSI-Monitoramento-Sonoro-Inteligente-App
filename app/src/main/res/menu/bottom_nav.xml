@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_inicio"
+        android:icon="@drawable/pontolaranja"
+        android:title="Início" />
+
+    <item
+        android:id="@+id/nav_dispositivos"
+        android:icon="@drawable/pontoverde"
+        android:title="Dispositivos" />
+
+    <item
+        android:id="@+id/nav_config"
+        android:icon="@drawable/pontolaranja"
+        android:title="Config" />
+</menu>
