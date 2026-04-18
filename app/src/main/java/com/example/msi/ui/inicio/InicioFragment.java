@@ -12,7 +12,6 @@ import com.example.msi.databinding.FragmentInicioBinding;
 
 public final class InicioFragment extends Fragment {
     private FragmentInicioBinding binding;
-    private HistoryAdapter historyAdapter;
 
     public InicioFragment() {
         super(R.layout.fragment_inicio);
@@ -23,12 +22,7 @@ public final class InicioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentInicioBinding.bind(view);
 
-        historyAdapter = new HistoryAdapter();
-        binding.rvHistorico.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.rvHistorico.setAdapter(historyAdapter);
-
         InicioViewModel vm = new ViewModelProvider(this).get(InicioViewModel.class);
-        vm.getState().observe(getViewLifecycleOwner(), this::render);
     }
 
     private void render(InicioUiState state) {
@@ -38,7 +32,6 @@ public final class InicioFragment extends Fragment {
         binding.textREventosHoje.setText(state.getEventosHoje());
         binding.textRAlertasAtivos.setText(state.getAlertasAtivos());
         binding.textRTempoOnline.setText(state.getTempoOnline());
-        historyAdapter.submitList(state.getHistory());
     }
 
     @Override

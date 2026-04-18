@@ -8,15 +8,13 @@ public final class InicioUiState {
     private final String eventosHoje;
     private final String alertasAtivos;
     private final String tempoOnline;
-    private final List<HistoryEvent> history;
 
-    public InicioUiState(String statusLabel, String statusLastUpdated, String eventosHoje, String alertasAtivos, String tempoOnline, List<HistoryEvent> history) {
+    public InicioUiState(String statusLabel, String statusLastUpdated, String eventosHoje, String alertasAtivos, String tempoOnline) {
         this.statusLabel = statusLabel;
         this.statusLastUpdated = statusLastUpdated;
         this.eventosHoje = eventosHoje;
         this.alertasAtivos = alertasAtivos;
         this.tempoOnline = tempoOnline;
-        this.history = history;
     }
 
     public String getStatusLabel() {
@@ -39,7 +37,4 @@ public final class InicioUiState {
         return tempoOnline;
     }
 
-    public List<HistoryEvent> getHistory() {
-        return history;
-    }
 }
