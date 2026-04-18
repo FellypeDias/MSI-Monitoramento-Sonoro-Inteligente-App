@@ -2,16 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_inicio"
-        android:icon="@drawable/pontolaranja"
-        android:title="Início" />
+        android:icon="@drawable/ic_inicio_24"
+        android:title="Inicio" />
 
     <item
         android:id="@+id/nav_dispositivos"
-        android:icon="@drawable/pontoverde"
+        android:icon="@drawable/ic_dispositivos_24"
         android:title="Dispositivos" />
 
     <item
         android:id="@+id/nav_config"
-        android:icon="@drawable/pontolaranja"
+        android:icon="@drawable/ic_config_24"
         android:title="Config" />
 </menu>
+

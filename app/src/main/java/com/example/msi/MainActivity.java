@@ -3,6 +3,7 @@ package com.example.msi;
 import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.example.msi.ui.config.ConfigFragment;
 import com.example.msi.ui.dispositivos.DispositivosFragment;
 import com.example.msi.ui.inicio.InicioFragment;
@@ -16,38 +17,33 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragmentContainerView, new InicioFragment())
-                    .commit();
-        }
+        BottomNavigationView navegação = findViewById(R.id.bottomNavigationView);
 
-        BottomNavigationView nav = findViewById(R.id.bottomNavigationView);
-        if (nav != null) {
-            nav.setOnItemSelectedListener(item -> {
-                int id = item.getItemId();
-                if (id == R.id.nav_inicio) {
+        if (navegação != null) {
+            navegação.setOnItemSelectedListener(item -> {
+                int idItem = item.getItemId();
+                Fragment fragmentoSelecionado = null;
+
+                if (idItem == R.id.nav_inicio) {
+                    fragmentoSelecionado = new InicioFragment();
+                } else if (idItem == R.id.nav_dispositivos) {
+                    fragmentoSelecionado = new DispositivosFragment();
+                } else if (idItem == R.id.nav_config) {
+                    fragmentoSelecionado = new ConfigFragment();
+                }
+
+                if (fragmentoSelecionado != null) {
                     getSupportFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.fragmentContainerView, new InicioFragment())
-                            .commit();
-                    return true;
-                } else if (id == R.id.nav_dispositivos) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainerView, new DispositivosFragment())
-                            .commit();
-                    return true;
-                } else if (id == R.id.nav_config) {
-                    getSupportFragmentManager()
-                            .beginTransaction()
-                            .replace(R.id.fragmentContainerView, new ConfigFragment())
+                            .replace(R.id.fragmentContainerView, fragmentoSelecionado)
                             .commit();
                     return true;
                 }
                 return false;
             });
+            if (savedInstanceState == null) {
+                navegação.setSelectedItemId(R.id.nav_inicio);
+            }
         }
     }
 }
