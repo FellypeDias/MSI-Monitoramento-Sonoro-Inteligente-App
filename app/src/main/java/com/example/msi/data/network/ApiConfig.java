@@ -5,6 +5,6 @@ public final class ApiConfig {
     }
 
     // Troque aqui pela URL HTTPS do seu backend no Railway.
-    public static final String BASE_URL = "postgres-production-ca011.up.railway.app";
+    public static final String BASE_URL = "postgres-production-40ad.up.railway.app";
 }
 
