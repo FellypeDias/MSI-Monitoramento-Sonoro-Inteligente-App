@@ -14,10 +14,13 @@ exports.createEvent = async (req, res) => {
 
   try {
     const event = await saveEvent(tipoNormalizado, intensity, deviceId);
-    return res.json(event);
+    return res.status(201).json(event);
   } catch (error) {
     console.error("Error creating event:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
   }
 };
 
@@ -27,6 +30,9 @@ exports.listEvents = async (req, res) => {
     return res.json(events);
   } catch (error) {
     console.error("Error fetching events:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
   }
 };
