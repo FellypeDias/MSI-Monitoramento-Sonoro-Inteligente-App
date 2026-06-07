@@ -28,6 +28,7 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
+            app:srcCompat="@drawable/ic_avatar_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
