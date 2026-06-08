@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 
 const eventosRoutes = require("./routes/eventos");
+const comandosRoutes = require("./routes/comandos");
 
 app.use(express.json());
 
@@ -10,6 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/eventos", eventosRoutes);
+app.use("/comandos", comandosRoutes);
 
 const PORT = process.env.PORT || 3000;
 
