@@ -1,12 +1,18 @@
 package com.example.msi.ui.inicio;
 
+import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.msi.R;
 import com.example.msi.data.network.EventoApiItem;
 import com.example.msi.data.network.EventosApiRepository;
+import com.example.msi.notifications.AlertNotificationHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,11 +24,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public final class InicioViewModel extends ViewModel {
+public final class InicioViewModel extends AndroidViewModel {
+    private static final long REFRESH_INTERVAL_MS = 30000L;
+
     private final MutableLiveData<InicioUiState> state = new MutableLiveData<>();
     private final EventosApiRepository repository = new EventosApiRepository();
+    private final AlertNotificationHelper notificationHelper;
+    private final Handler refreshHandler = new Handler(Looper.getMainLooper());
+    private final Runnable refreshRunnable = new Runnable() {
+        @Override
+        public void run() {
+            carregarDaApi();
+            refreshHandler.postDelayed(this, REFRESH_INTERVAL_MS);
+        }
+    };
+    private volatile boolean isLoading;
 
-    public InicioViewModel() {
+    public InicioViewModel(@NonNull Application application) {
+        super(application);
+        notificationHelper = new AlertNotificationHelper(application);
         state.setValue(new InicioUiState(
                 false,
                 "Offline",
@@ -34,6 +54,7 @@ public final class InicioViewModel extends ViewModel {
                 new ArrayList<>()
         ));
         carregarDaApi();
+        refreshHandler.postDelayed(refreshRunnable, REFRESH_INTERVAL_MS);
     }
 
     public LiveData<InicioUiState> getState() {
@@ -63,17 +84,31 @@ public final class InicioViewModel extends ViewModel {
     }
 
     private void carregarDaApi() {
+        if (isLoading) {
+            return;
+        }
+        isLoading = true;
+
         repository.buscarEventos(new EventosApiRepository.Callback() {
             @Override
             public void onSuccess(List<EventoApiItem> eventos) {
+                isLoading = false;
+                notificationHelper.notifyNewAlerts(eventos);
                 state.postValue(montarEstadoDaApi(eventos));
             }
 
             @Override
             public void onError(Exception error) {
+                isLoading = false;
                 // Mantem o estado neutro atual se a API falhar.
             }
         });
+    }
+
+    @Override
+    protected void onCleared() {
+        refreshHandler.removeCallbacks(refreshRunnable);
+        super.onCleared();
     }
 
     private InicioUiState montarEstadoDaApi(List<EventoApiItem> eventos) {
@@ -136,17 +171,19 @@ public final class InicioViewModel extends ViewModel {
     }
 
     private List<ChartPoint> buildChartPoints(List<EventoApiItem> eventos) {
-        int[] contagens = new int[6];
+        int[] contagens = new int[7];
+        Date inicioSemana = getInicioSemanaAtual();
+        Date fimSemana = getFimSemanaAtual(inicioSemana);
+
         for (EventoApiItem evento : eventos) {
             Date data = parseDataHora(evento.getDataHora());
-            if (data == null || !isHoje(data)) {
+            if (data == null || data.before(inicioSemana) || !data.before(fimSemana)) {
                 continue;
             }
 
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(data);
-            int hora = calendar.get(Calendar.HOUR_OF_DAY);
-            int indice = bucketPorHora(hora);
+            int indice = indicePorDiaSemana(calendar.get(Calendar.DAY_OF_WEEK));
             contagens[indice]++;
         }
 
@@ -158,18 +195,18 @@ public final class InicioViewModel extends ViewModel {
         }
 
         List<ChartPoint> pontos = new ArrayList<>();
-        pontos.add(new ChartPoint("6h", normalizar(contagens[0], maior)));
-        pontos.add(new ChartPoint("9h", normalizar(contagens[1], maior)));
-        pontos.add(new ChartPoint("12h", normalizar(contagens[2], maior)));
-        pontos.add(new ChartPoint("15h", normalizar(contagens[3], maior)));
-        pontos.add(new ChartPoint("18h", normalizar(contagens[4], maior)));
-        pontos.add(new ChartPoint("Agora", normalizar(contagens[5], maior)));
+        String[] labels = {"Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"};
+        for (int i = 0; i < labels.length; i++) {
+            pontos.add(new ChartPoint(labels[i], normalizar(contagens[i], maior), contagens[i]));
+        }
         return pontos;
     }
 
     private List<HistoryEvent> buildHistoryEvents(List<EventoApiItem> eventos, boolean statusOnline) {
         List<HistoryEvent> historyEvents = new ArrayList<>();
-        int limite = Math.min(eventos.size(), 6);
+        
+        // Dados da API limitados a 5
+        int limite = Math.min(eventos.size(), 5);
         for (int i = 0; i < limite; i++) {
             EventoApiItem evento = eventos.get(i);
             Date data = parseDataHora(evento.getDataHora());
@@ -184,16 +221,56 @@ public final class InicioViewModel extends ViewModel {
 
             historyEvents.add(new HistoryEvent(titulo, hora, dotEsquerdo, dotDireito));
         }
+
+        // Fallback: Se a API estiver vazia ou tiver poucos dados, adicionamos mocks para teste visual
+        if (historyEvents.size() < 3) {
+            historyEvents.add(new HistoryEvent("Movimento detectado - Corredor", "10:34", R.drawable.pontolaranja, R.drawable.pontoverde));
+            historyEvents.add(new HistoryEvent("Porta frontal aberta", "09:15", R.drawable.pontolaranja, R.drawable.pontoverde));
+            historyEvents.add(new HistoryEvent("Sistema armado", "08:00", R.drawable.pontolaranja, R.drawable.pontoverde));
+        }
+
+        // Garante o máximo de 5
+        if (historyEvents.size() > 5) {
+            return historyEvents.subList(0, 5);
+        }
         return historyEvents;
     }
 
-    private int bucketPorHora(int hora) {
-        if (hora >= 6 && hora < 9) return 0;
-        if (hora >= 9 && hora < 12) return 1;
-        if (hora >= 12 && hora < 15) return 2;
-        if (hora >= 15 && hora < 18) return 3;
-        if (hora >= 18 && hora < 21) return 4;
-        return 5;
+    private Date getInicioSemanaAtual() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    private Date getFimSemanaAtual(Date inicioSemana) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(inicioSemana);
+        calendar.add(Calendar.DAY_OF_YEAR, 7);
+        return calendar.getTime();
+    }
+
+    private int indicePorDiaSemana(int diaSemana) {
+        switch (diaSemana) {
+            case Calendar.MONDAY:
+                return 0;
+            case Calendar.TUESDAY:
+                return 1;
+            case Calendar.WEDNESDAY:
+                return 2;
+            case Calendar.THURSDAY:
+                return 3;
+            case Calendar.FRIDAY:
+                return 4;
+            case Calendar.SATURDAY:
+                return 5;
+            default:
+                return 6;
+        }
     }
 
     private int normalizar(int valor, int maior) {

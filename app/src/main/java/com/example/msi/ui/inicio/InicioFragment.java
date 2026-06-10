@@ -73,7 +73,8 @@ public final class InicioFragment extends Fragment {
                 binding.chartBar3,
                 binding.chartBar4,
                 binding.chartBar5,
-                binding.chartBar6
+                binding.chartBar6,
+                binding.chartBar7
         };
 
         TextView[] labels = new TextView[] {
@@ -82,17 +83,30 @@ public final class InicioFragment extends Fragment {
                 binding.chartLabel3,
                 binding.chartLabel4,
                 binding.chartLabel5,
-                binding.chartLabel6
+                binding.chartLabel6,
+                binding.chartLabel7
+        };
+
+        TextView[] values = new TextView[] {
+                binding.chartValue1,
+                binding.chartValue2,
+                binding.chartValue3,
+                binding.chartValue4,
+                binding.chartValue5,
+                binding.chartValue6,
+                binding.chartValue7
         };
 
         int count = Math.min(points.size(), bars.length);
         for (int i = 0; i < count; i++) {
             ChartPoint point = points.get(i);
             labels[i].setText(point.getLabel());
+            values[i].setText(String.valueOf(point.getCount()));
             setBarHeight(bars[i], point.getValue());
         }
 
         for (int i = count; i < bars.length; i++) {
+            values[i].setText("0");
             setBarHeight(bars[i], 0);
         }
     }
